@@ -59,9 +59,6 @@ function getMealById(mealID) {
 
 // Fetch random meal from API
 function getRandomMeal() {
-  // Clear meals and heading
-  mealsEl.innerHTML = '';
-  resultHeading.innerHTML = '';
 
   fetch(`https://www.themealdb.com/api/json/v1/1/random.php`)
     .then(res => res.json())
@@ -75,6 +72,10 @@ function getRandomMeal() {
 
 // Add meal to DOM
 function addMealToDom(meal) {
+  // Clear meals and heading
+  mealsEl.innerHTML = '';
+  resultHeading.innerHTML = '';
+
   const ingredients = [];
 
   for (let i = 1; i <= 20; i++) {
