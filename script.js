@@ -57,6 +57,22 @@ function getMealById(mealID) {
     });
 }
 
+// Fetch random meal from API
+function getRandomMeal() {
+  // Clear meals and heading
+  mealsEl.innerHTML = '';
+  resultHeading.innerHTML = '';
+
+  fetch(`https://www.themealdb.com/api/json/v1/1/random.php`)
+    .then(res => res.json())
+    .then(data => {
+      const meal = data.meals[0];
+
+      addMealToDom(meal);
+    });
+}
+
+
 // Add meal to DOM
 function addMealToDom(meal) {
   const ingredients = [];
@@ -89,6 +105,7 @@ function addMealToDom(meal) {
 
 // Event listeners
 submit.addEventListener('submit', searchMeal);
+random.addEventListener('click', getRandomMeal);
 
 mealsEl.addEventListener('click', e => {
   const mealInfo = e.path.find(item => {
@@ -104,3 +121,8 @@ mealsEl.addEventListener('click', e => {
     getMealById(mealID);
   }
 });
+
+
+// Task: 1- Clean the page when you click on a result
+//       2- Use async and await to make better the code
+ 
