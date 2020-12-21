@@ -7,7 +7,7 @@ const search = document.getElementById('search'),
 
 
 //Search meal and fetch from API
-function searchMeal(e) {
+async function searchMeal(e) {
   e.preventDefault();
 
   // Clear single meal
@@ -18,26 +18,26 @@ function searchMeal(e) {
 
   // Check for empty
   if (term.trim()) {
-    fetch(`https://www.themealdb.com/api/json/v1/1/search.php?s=${term}`)
-      .then(res => res.json())
-      .then(data => {
-        console.log(data.meals);
-        resultHeading.innerHTML = `<h2>Search results for '${term}':</h2>`;
+    const response = await fetch(`https://www.themealdb.com/api/json/v1/1/search.php?s=${term}`)
+    const data = await response.json()
+      
+    console.log(data.meals);
+    resultHeading.innerHTML = `<h2>Search results for '${term}':</h2>`;
 
-        if (data.meals === null) {
-          resultHeading.innerHTML = `<p>There are no search results. Try again!</p>`;
-        } else {
-          mealsEl.innerHTML = data.meals.map(meal => `
-            <div class="meal">
-              <img src="${meal.strMealThumb}" alt="${meal.strMeal}"/>
-              <div class="meal-info" data-mealID="${meal.idMeal}">
-                <h3>${meal.strMeal}</h3>
-              </div>
-            </div>
-          `)
-          .join('');
-        }
-      });
+    if (data.meals === null) {
+      resultHeading.innerHTML = `<p>There are no search results. Try again!</p>`;
+    } else {
+      mealsEl.innerHTML = data.meals.map(meal => `
+        <div class="meal">
+          <img src="${meal.strMealThumb}" alt="${meal.strMeal}"/>
+          <div class="meal-info" data-mealID="${meal.idMeal}">
+            <h3>${meal.strMeal}</h3>
+          </div>
+        </div>
+      `)
+      .join('');
+    }
+      
     // Clear search text
     search.value = '';  
   } else {
@@ -47,26 +47,24 @@ function searchMeal(e) {
 }
 
 // Fetch meal by ID
-function getMealById(mealID) {
-  fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${mealID}`)
-    .then(res => res.json())
-    .then(data => {
-      const meal = data.meals[0];
+async function getMealById(mealID) {
+  const response = await fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${mealID}`)
+  const data = await response.json();
 
-      addMealToDom(meal);
-    });
+  const meal = data.meals[0];
+
+  addMealToDom(meal);
 }
 
 // Fetch random meal from API
-function getRandomMeal() {
+async function getRandomMeal() {
 
-  fetch(`https://www.themealdb.com/api/json/v1/1/random.php`)
-    .then(res => res.json())
-    .then(data => {
-      const meal = data.meals[0];
+  const response = await fetch(`https://www.themealdb.com/api/json/v1/1/random.php`)
+  const data = await response.json();
 
-      addMealToDom(meal);
-    });
+  const meal = data.meals[0];
+
+  addMealToDom(meal);
 }
 
 
@@ -122,8 +120,4 @@ mealsEl.addEventListener('click', e => {
     getMealById(mealID);
   }
 });
-
-
-// Task: 1- Clean the page when you click on a result
-//       2- Use async and await to make better the code
  
